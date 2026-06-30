@@ -2,11 +2,13 @@
 
 Ce projet est un script automatisé en Python qui récupère les nouvelles missions freelance pour des profils DevOps / Cloud sur plusieurs plateformes et vous notifie via Telegram.
 
-## Plateformes supportées pour l'instant :
+## Plateformes supportées :
 - Freelance-info
 - Free-work
+- LinkedIn (via recherche publique en HTML)
+- Malt (via recherche en HTML)
 
-*(Note : Les plateformes comme Malt, LinkedIn ou Upwork nécessitent souvent des mécanismes d'authentification ou des APIs spécifiques et sont plus complexes à scraper sans être bloqué. Vous pouvez étendre ce projet en ajoutant de nouveaux scrapers dans le dossier `scrapers/`)*.
+*(Note : LinkedIn et Malt ont de fortes protections anti-bots. Si l'action GitHub se fait bloquer, il faudra envisager de rajouter des proxies ou des délais).*
 
 ## Prérequis
 
