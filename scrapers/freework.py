@@ -52,8 +52,8 @@ class FreeWorkScraper(BaseScraper):
                     seen_ids.add(job_id)
                     slug = job.get("slug", "")
                     
-                    # Format: https://www.free-work.com/fr/tech-it/job/{slug}
-                    full_url = f"{self.base_url}/fr/tech-it/job/{slug}"
+                    # Format: https://www.free-work.com/fr/tech-it/job-mission/{slug}
+                    full_url = f"{self.base_url}/fr/tech-it/job-mission/{slug}"
                     
                     company_name = "Client Free-Work"
                     if job.get("company") and isinstance(job["company"], dict):
