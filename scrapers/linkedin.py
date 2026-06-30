@@ -38,11 +38,16 @@ class LinkedInScraper(BaseScraper):
                     location = location_elem.text.strip() if location_elem else "Non spécifié"
                     href = link_elem.get('href', '').split('?')[0] # Nettoyer les paramètres de tracking
                     
-                    # Filter out CDIs
+                    # Filter out CDIs and enforce Freelance/Mission
                     title_lower = title.lower()
+                    
+                    # Exclude CDIs
                     is_cdi = 'cdi' in title_lower.split() or 'cdi' in title_lower.replace('-', ' ').split()
                     
-                    if self.matches_keywords(title) and not is_cdi:
+                    # Enforce freelance terminology
+                    is_freelance = any(word in title_lower for word in ["freelance", "mission", "indépendant", "independant", "contract", "tj", "tjm"])
+                    
+                    if self.matches_keywords(title) and not is_cdi and is_freelance:
                         missions.append({
                             "id": href,
                             "title": title,
