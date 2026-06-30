@@ -22,10 +22,16 @@ class FreeWorkScraper(BaseScraper):
             response.raise_for_status()
             
             data = response.json()
-            jobs = data.get("hydra:member", [])
+            
+            if isinstance(data, dict):
+                jobs = data.get("hydra:member", [])
+            elif isinstance(data, list):
+                jobs = data
+            else:
+                jobs = []
             
             for job in jobs:
-                title = job.get("title", "")
+                title = job.get("title", job.get("name", ""))
                 slug = job.get("slug", "")
                 if not title or not slug:
                     continue
