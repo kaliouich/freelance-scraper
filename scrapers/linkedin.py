@@ -34,13 +34,20 @@ class LinkedInScraper(BaseScraper):
                 if title_elem and link_elem:
                     title = title_elem.text.strip()
                     company = company_elem.text.strip() if company_elem else "Non spécifié"
+                    location_elem = card.find('span', class_='job-search-card__location')
+                    location = location_elem.text.strip() if location_elem else "Non spécifié"
                     href = link_elem.get('href', '').split('?')[0] # Nettoyer les paramètres de tracking
                     
-                    if self.matches_keywords(title):
+                    # Filter out CDIs
+                    title_lower = title.lower()
+                    is_cdi = 'cdi' in title_lower.split() or 'cdi' in title_lower.replace('-', ' ').split()
+                    
+                    if self.matches_keywords(title) and not is_cdi:
                         missions.append({
                             "id": href,
                             "title": title,
                             "company": company,
+                            "location": location,
                             "url": href,
                             "platform": "LinkedIn",
                             "date_published": datetime.datetime.now().strftime("%Y-%m-%d")
