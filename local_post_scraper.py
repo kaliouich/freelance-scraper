@@ -30,7 +30,7 @@ def main():
         return
 
     # Keywords to search in posts
-    search_keywords = "recherche freelance devops OR cloud"
+    search_keywords = "recherche freelance (aws OR docker OR cloud OR devops OR kubernetes OR k8s)"
     
     print(f"Recherche de posts avec les mots-clés : '{search_keywords}'...")
     

@@ -3,7 +3,7 @@ from typing import List, Dict
 
 class BaseScraper(ABC):
     def __init__(self):
-        self.keywords = ["devops", "cloud", "kubernetes", "terraform", "aws", "gcp", "ci/cd", "ci-cd", "azure"]
+        self.keywords = ["aws", "docker", "cloud", "devops", "kubernetes", "k8s"]
     
     @abstractmethod
     def scrape(self) -> List[Dict]:
