@@ -20,36 +20,40 @@ class FreeWorkScraper(BaseScraper):
         for keyword in self.keywords:
             # We don't want to send special characters like / in the search query directly if it breaks the API
             clean_keyword = keyword.replace("/", " ")
-            api_url = f"{self.base_url}/api/jobs?contracts=contractor&search={clean_keyword}&itemsPerPage=100"
+            api_url = f"{self.base_url}/api/job_postings?contracts=contractor&search={clean_keyword}&itemsPerPage=100"
+            headers = {"User-Agent": "Mozilla/5.0"}
             
             try:
-                response = requests.get(api_url, headers=headers, timeout=10)
-                if response.status_code != 200:
-                    continue
-                
+                response = requests.get(api_url, headers=headers)
+                response.raise_for_status()
                 data = response.json()
                 
-                if isinstance(data, dict):
-                    jobs = data.get("hydra:member", [])
-                elif isinstance(data, list):
-                    jobs = data
-                else:
-                    jobs = []
+                # The API returns a hydra collection
+                jobs = data.get("hydra:member", [])
                 
                 for job in jobs:
-                    title = job.get("title", job.get("name", ""))
-                    slug = job.get("slug", "")
-                    if not title or not slug:
+                    # For job_postings, the actual title is in 'title'
+                    title = job.get("title", "")
+                    
+                    if not title:
                         continue
-                    
-                    # Format: https://www.free-work.com/fr/tech-it/jobs/{slug}
-                    full_url = f"{self.base_url}/fr/tech-it/jobs/{slug}"
-                    job_id = str(job.get("id", full_url))
-                    
-                    if job_id in seen_ids:
+                        
+                    # Filter out irrelevant jobs based on title matching
+                    if not self.matches_keywords(title):
                         continue
+                        
+                    # The unique id
+                    job_id = str(job.get("id", ""))
                     
+                    # Ensure we don't process duplicates within the same run or if already in DB
+                    if not job_id or job_id in seen_ids:
+                        continue
+                        
                     seen_ids.add(job_id)
+                    slug = job.get("slug", "")
+                    
+                    # Format: https://www.free-work.com/fr/tech-it/job/{slug}
+                    full_url = f"{self.base_url}/fr/tech-it/job/{slug}"
                     
                     company_name = "Client Free-Work"
                     if job.get("company") and isinstance(job["company"], dict):
