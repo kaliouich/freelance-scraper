@@ -2,8 +2,8 @@ name: Scrape Freelance Missions
 
 on:
   schedule:
-    # Run everyday at 8:00 AM UTC (10:00 AM Paris)
-    - cron: '0 8 * * *'
+    # Run everyday at 6:00 AM UTC (8:00 AM Paris)
+    - cron: '0 6 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
